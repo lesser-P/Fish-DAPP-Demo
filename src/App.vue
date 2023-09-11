@@ -1,32 +1,54 @@
 <template>
   <div id="app">
-    <nav>
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </nav>
-    <router-view />
+    <template>
+      <Header></Header>
+      <transition name="fade" mode="out-in">
+        <router-view></router-view>
+      </transition>
+      <PopupWrapper v-if="showPopup"></PopupWrapper>
+      <Footer></Footer>
+    </template>
+    <MetamaskChecker
+      @checkSucess="metamaskCheckSuccess()"
+      @checkError="metamaskCheckError()"
+    ></MetamaskChecker>
   </div>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+const Header = () => import("@/components/Header.vue");
+const Footer = () => import("@/components/Footer.vue");
+const PopupWrapper = () => import("@/components/Popups/PopupWrapper.vue");
+const MetamaskChecker = () =>
+  import("@/components/MetamaskChecker/MetamaskChecker.vue");
 
-nav {
-  padding: 30px;
-}
+export default {
+  data() {
+    return {
+      checkInProcess: true,
+    };
+  },
+  methods: {
+    async metamaskCheckSuccess() {
+      this.checkInProcess = false;
+      this.Timer = setInterval(async () => {}, 6000);
+    },
 
-nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+    async metamaskCheckError(message) {
+      this.checkInProcess = true;
+      if (message) alert(message);
+    },
+  },
+  computed: {
+    showPopup() {
+      return this.$store.getters.getPopupState;
+    },
+  },
+  components: {
+    MetamaskChecker,
+    Header,
+    Footer,
+    PopupWrapper,
+  },
+};
+</script>
