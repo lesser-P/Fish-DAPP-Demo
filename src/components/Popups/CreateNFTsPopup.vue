@@ -1,5 +1,5 @@
 <template>
-  <div class="create-content">
+  <div class="create-content" id="staticBackdrop">
     <el-dialog
       title="创建NFT"
       :visible.sync="dialogVisible"
@@ -108,11 +108,19 @@ export default {
   mixins: [createNft],
   data() {
     return {
-      dialogVisible: true,
+      dialogVisible: visibleDia,
       num: 1,
     };
   },
   methods: {
+    shown() {
+      var myModal = document.getElementById("staticBackdrop");
+      var myInput = document.getElementById("staticBackdrop");
+
+      myModal.addEventListener("shown.bs.modal", function () {
+        myInput.focus();
+      });
+    },
     handleClose(done) {
       this.$confirm("确认关闭？")
         .then((_) => {

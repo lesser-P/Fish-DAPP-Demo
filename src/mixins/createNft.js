@@ -32,7 +32,6 @@ export default {
         this.roi = d;
       });
       this.getPeekSpot().then((d) => {
-        console.log(d);
         this.peekSpot = d;
       });
       //检查是否有approve
@@ -115,7 +114,6 @@ export default {
         ),
         4
       );
-      console.log(balanceOf + "");
       return balanceOf;
     },
     //获得价格
@@ -164,6 +162,7 @@ export default {
         //   this.amt
         // );
         // gasLimit = gasLimit * 2;
+
         let tx = await this.buyNFTLogicContract.buyNft(this.amt);
         await tx.wait();
         await this.updateInfo();

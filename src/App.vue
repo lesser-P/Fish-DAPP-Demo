@@ -2,10 +2,10 @@
   <div id="app">
     <template>
       <Header></Header>
+      <PopupWrapper v-if="showPopup"></PopupWrapper>
       <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
-      <PopupWrapper v-if="showPopup"></PopupWrapper>
       <Footer></Footer>
     </template>
     <MetamaskChecker
