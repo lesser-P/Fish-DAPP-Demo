@@ -96,6 +96,7 @@ export default {
       );
 
       const userSigner = userProvider.getSigner();
+
       this.$store.commit("setMetaMaskActive", true);
       this.$store.commit("setProvider", userProvider);
       this.$store.commit("setSigner", userSigner);

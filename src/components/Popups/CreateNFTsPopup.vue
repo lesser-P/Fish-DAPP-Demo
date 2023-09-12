@@ -151,6 +151,7 @@ export default {
 }
 .btn-buy {
   margin-top: 30px;
+  width: 310px;
 }
 .nftImg {
   width: 300px;
@@ -168,9 +169,7 @@ export default {
   flex: 1;
   padding: 20px;
 }
-.el-button--success {
-  width: 310px;
-}
+
 .dig-right {
   flex: 1;
   padding: 20px;

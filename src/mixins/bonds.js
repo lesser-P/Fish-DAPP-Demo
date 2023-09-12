@@ -4,6 +4,7 @@ import { prettifySeconds } from "@/utils/prettifySeconds";
 export default {
   data() {
     return {
+      nftInfo: [{ name: "FISH", claimble: "", pending: "" }],
       now: null,
       nftBalance: 0,
       youNftInfo: [],
@@ -18,8 +19,7 @@ export default {
     };
   },
   async mounted() {
-    console.log(this.claimble);
-    console.log(this.pending);
+    this.fishNftContract = await this.createfishNftContract();
     //每秒更新一次
     this.timer = setInterval(async () => {
       //当前时间戳
@@ -33,13 +33,12 @@ export default {
     }, 1000);
     //获取实例
     await this.updateInfo();
-    this.fishNftContract = await this.createfishNftContract();
     //更新用户信息
     // this.timer1 = setInterval(async () => {
     //   await this.updateInfo();
     // }, 1000);
     //更新nft信息
-    //await this.updateYourNFTs();
+    await this.updateYourNFTs();
   },
   beforeDestroy() {
     clearInterval(this.timer);
@@ -56,7 +55,6 @@ export default {
       return userProvider.getSigner();
     },
     account() {
-      console.log(this.$store.getters.getAccount);
       return this.$store.getters.getAccount;
     },
   },
@@ -86,13 +84,18 @@ export default {
     },
     //获得nft数量
     async getNftBalance() {
-      this.nftBalanceOf_ = await this.fishNftContract.balanceOf(this.account);
+      this.nftBalanceOf_ = await this.fishNftContract.balanceOf(
+        "0xf5acd7df01a57360e8e53ac2d28b8452ec0efcc6"
+      );
       return this.nftBalanceOf_;
     },
     //获得用户信息
     async getUserInfo() {
-      console.log(this.account);
-      this.userInfo_ = await this.fishNftContract.userInfo(this.account);
+      this.userInfo_ = await this.fishNftContract.userInfo(
+        "0xf5acd7df01a57360e8e53ac2d28b8452ec0efcc6",
+        { gasLimit: 100000000000 }
+      );
+      console.log("userinfo", this.userInfo_);
       return this.userInfo_;
     },
     //获得奖励信息
@@ -102,21 +105,25 @@ export default {
     },
     //更新信息
     async updateInfo() {
-      this.getUserInfo().then((d) => {
-        //可提取奖励，退18位取4位小数
-        this.claimble = this.retain(
-          parseFloat(this.$ethers.utils.formatUnits(d.claimble.toString(), 18)),
-          4
-        );
-        this.lastClaimTimestamp = d.lastClaimTimestamp;
-        this.releaseSecond = d.releaseSecond;
-      });
-      this.getPending().then((d) => {
+      // await this.getUserInfo().then((d) => {
+      //   //可提取奖励，退18位取4位小数
+      //   this.claimble = this.retain(
+      //     parseFloat(this.$ethers.utils.formatUnits(d.claimble.toString(), 18)),
+      //     4
+      //   );
+      //   this.lastClaimTimestamp = d.lastClaimTimestamp;
+      //   this.releaseSecond = d.releaseSecond;
+      // });
+      await this.getPending().then((d) => {
         const pending = this.retain(
           parseFloat(this.$ethers.utils.formatUnits(d.toString(), 18)),
           4
         );
         this.pending = pending;
+        this.nftInfo[0].pending = this.pending;
+        this.claimble === 0
+          ? (this.nftInfo[0].claimble = "NaN")
+          : (this.nftInfo[0].claimble = this.claimble);
       });
     },
     //更新NFT信息
@@ -126,7 +133,6 @@ export default {
       this.getNftBalance().then((d) => {
         //这个balance是nft数量
         this.nftBalance = d;
-        console.log(d);
         for (let i = 0; i < this.nftBalance; i++) {
           this.fishNftContract
             .tokenOfOwnerByIndex(this.account, i)

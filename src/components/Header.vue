@@ -13,7 +13,7 @@
           <router-link :to="{ name: 'home' }"></router-link>
         </el-menu-item>
         <el-menu-item class="meun-item" index="/bond">
-          债券
+          NFTs债券
           <router-link :to="{ name: 'bond' }"></router-link>
         </el-menu-item>
         <el-menu-item class="meun-item" index="/stake"

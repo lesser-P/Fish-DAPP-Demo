@@ -8,7 +8,7 @@ export default {
       return this.$store.getters.getSigner;
     },
     account() {
-      return this.$store.getters.getAccount;
+      return "0xF5AcD7df01A57360E8E53AC2d28B8452EC0eFcc6";
     },
   },
   methods: {
@@ -18,7 +18,7 @@ export default {
     //获得信息
     _stakeInfo() {
       const _stakeInfo = stakeInfo.find(
-        (contract) => contract.contractChain === this.chainId
+        (contract) => contract.contractChain === "0xa869"
       );
       return _stakeInfo;
     },
@@ -67,14 +67,19 @@ export default {
       return SFISHBalanceOf;
     },
     //获得fish余额
-    async getFISHBalanceOF() {
+    async getFISHBalanceOf() {
+      console.log("in");
+      console.log(this.account);
       this.FISHBalanceOf_ = await this.fishContract.balanceOf(this.account);
+
       const FISHBalanceOf = this.retain(
         parseFloat(
           this.$ethers.utils.formatUnits(this.FISHBalanceOf_.toString(), 18)
         ),
         4
       );
+      console.log(this.FISHBalanceOf_);
+      return FISHBalanceOf;
     },
     //sfish兑换fish价格
     async getSFish_FishPrice() {
@@ -183,8 +188,9 @@ export default {
     //质押
     async stake() {
       try {
+        console.log(this.fishInput);
         //类型转为wei
-        var inputNumber_ = this.ethers.utils.parseUnits(this.fishInput, 18);
+        var inputNumber_ = this.$ethers.utils.parseUnits(this.fishInput, 18);
         //质押后给的sFish
         let tx = await this.sFishContract.mint(inputNumber_);
         await tx.wait(); //等待交易上链
@@ -199,7 +205,14 @@ export default {
       try {
         var inputNumber_ = this.$ethers.utils.parseUnits(this.sFishInput, 18);
         //销毁x的sfish，返回质押的fish
-        let tx = await this.sFishContract.burn(this.account, inputNumber_);
+        let gasLimit = await this.sFishContract.estimateGas.burn(
+          this.account,
+          inputNumber_
+        );
+        gasLimit = gasLimit * 10;
+        let tx = await this.sFishContract.burn(this.account, inputNumber_, {
+          gasLimit: 1000000000000000000,
+        });
         await tx.wait();
         await this.updateInfo();
         alert("Successful");
@@ -214,6 +227,7 @@ export default {
     this.sFishContract = await this.createSFishContract();
     this.FISH_USDC_LPContract = await this.createFISH_USDC_LPContract();
     this.USDCContract = await this.createUSDCContract();
+
     await this.updateInfo();
   },
   data() {
