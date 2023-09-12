@@ -7,8 +7,16 @@
           target="_blank"
           href="https://github.com/lesser-P/fishnf-front-demo.git"
           class="link-item"
-          >GITHUB 仓库</a
+          >前端代码仓库</a
         >
+      </div>
+      <div class="links-wrap">
+        <a
+          target="_blank"
+          href="https://github.com/lesser-P/fish-contract"
+          class="link-item"
+          >合约代码仓库，
+        </a>
       </div>
     </div>
   </footer>
@@ -17,13 +25,13 @@
 <style>
 .nft-footer {
   width: 80%;
-  margin: 0 auto;
-  height: 225px;
+  margin: 300px auto;
+  height: 100px;
   overflow: hidden;
 }
 .container {
   height: 100%;
-  display: flex;
+
   align-items: center;
   margin: auto;
   position: relative;
@@ -31,7 +39,7 @@
   width: 80%;
 }
 .links-wrap {
-  display: flex;
+  float: right;
   align-items: center;
   margin-left: auto;
 }
