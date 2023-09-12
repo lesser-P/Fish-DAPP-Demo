@@ -1,17 +1,17 @@
 <template>
   <div id="app">
     <template>
+      <MetamaskChecker
+        @checkSucess="metamaskCheckSuccess()"
+        @checkError="metamaskCheckError()"
+      ></MetamaskChecker>
       <Header></Header>
-      <PopupWrapper v-if="showPopup"></PopupWrapper>
       <transition name="fade" mode="out-in">
         <router-view></router-view>
       </transition>
+      <PopupWrapper v-if="showPopup"></PopupWrapper>
       <Footer></Footer>
     </template>
-    <MetamaskChecker
-      @checkSucess="metamaskCheckSuccess()"
-      @checkError="metamaskCheckError()"
-    ></MetamaskChecker>
   </div>
 </template>
 

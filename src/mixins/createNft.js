@@ -2,11 +2,13 @@ import createNftInfo from "@/utils/contracts/createNft.js";
 export default {
   computed: {
     chainId() {
-      console.log("chainid:" + this.$store.getters.getChainId);
       return this.$store.getters.getChainId;
     },
     signer() {
-      return this.$store.getters.getSigner;
+      const userProvider = new this.$ethers.providers.Web3Provider(
+        window.ethereum
+      );
+      return userProvider.getSigner();
     },
     account() {
       return this.$store.getters.getAccount;
