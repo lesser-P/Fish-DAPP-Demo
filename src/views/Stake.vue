@@ -109,9 +109,10 @@ body {
   font-size: 20px;
 }
 .stake-input {
-  margin-top: 10px;
+  margin-top: 10px auto;
 }
-.el-input__inner {
-  width: 890px;
+.tab-stake {
+  width: 1000px;
+  margin: 0, auto;
 }
 </style>

@@ -142,7 +142,7 @@ export default {
   margin-top: 27px;
 }
 .el-input {
-  width: 300px;
+  width: 10%;
 }
 .dialog-content {
   display: flex;
